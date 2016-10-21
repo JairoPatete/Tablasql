@@ -16,9 +16,9 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
+//se incluyen las librerias del framework y las de SQL
 public class Login {
-
+//Declaracion de variables del framework y las variables de uso de SQL, Connection, Statement para envio de string a la DB y Resulset para resultados
 	private JFrame frame;
 	private JTextField textnombre;
 	private JTextField textpassword;
@@ -82,31 +82,31 @@ public class Login {
 		textpassword.setColumns(10);
 		
 		JButton btnLogin = new JButton("Login");
-		btnLogin.addActionListener(new ActionListener() {
+		btnLogin.addActionListener(new ActionListener() { //Boton de login para usuarios registrados
 			public void actionPerformed(ActionEvent e) {
-				DataBaseAccess conexion = new DataBaseAccess();
-				Statement stmt=null;
-				String login=textnombre.getText().trim();;
-				String password=textpassword.getText().trim();
+				DataBaseAccess conexion = new DataBaseAccess(); //Llamando a la clase DataBaseAccess y estableciendo conexion
 				
-				conn=conexion.getcon();
+				String login=textnombre.getText().trim();        //Pasando los datos a comparar desde los textbox
+				String password=textpassword.getText().trim();   //same
+				
+				conn=conexion.getcon(); //Estableciendo la conexion con la DB
 				if (conn!=null)
-					lblLogin.setText("Its connected!");
+					lblLogin.setText("Its connected!"); //Label temporal para saber si conecto o no.
 				try {
-					smtm = conn.createStatement();
+					smtm = conn.createStatement();    //Creando el statement que se pasara a la DB, esta es temporal y sujeta a revision.
 					String sql = "SELECT nombre,password FROM login WHERE nombre='frosty'and password='iwakura'";
 			        rs=smtm.executeQuery(sql);
-			        int count=0;
+			        int count=0;  //Bucle de comprobacion utilizando Resultset para que se mueva a traves de los registros
 			        while (rs.next()){
 			        	count=count+1;
 			        }
-			        if (count==1) {
+			        if (count==1) {   //Si es igual a 1 el campo existe en la DB
 			        	JOptionPane.showMessageDialog(null, "Usuario Encontrado!, acceso permitido");
 			        }
-			        else if (count>1){
+			        else if (count>1){ //Si es mayor a 1 el campo se encuentra duplicado en la DB
 			        	JOptionPane.showMessageDialog(null, "Usuario Duplicado, acceso denegado");
 			        }
-			        else {
+			        else { //Si es cero entonces el campo no se encontro en la base de datos
 			        	JOptionPane.showMessageDialog(null, "Usuario no encontrado, acceso denegado");
 			        }
 				} catch (SQLException e1) {
